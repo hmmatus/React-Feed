@@ -27,7 +27,7 @@ class ReactFeed extends Component {
       body: JSON.stringify(postsAux[index])
     }
 
-    fetch('https://reactcourseapi.herokuapp.com/post/', config)
+    fetch('https://reactcourseapi.herokuapp.com/post/like', config)
       .then(res => { this.fetchData() })
 
   }
@@ -67,7 +67,7 @@ class ReactFeed extends Component {
 
       return (<Post
         key={index}
-        name={post.user}
+        //name={post.user}
         likes={post.likes}
         title={post.title}
         text={post.text}
