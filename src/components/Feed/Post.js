@@ -25,12 +25,12 @@ const Post = props => {
 				<button type="button" className="btn btn-outline-primary" onClick={props.onClick}>Like!</button>
 				{localStorage.getItem("myUser") === props.name ?
 					<>
-					<button type="button" className="btn btn-outline-secondary" onClick={props.onDelete}>Delete</button>
+					<button type="button" className="btn btn-outline-primary" onClick={props.onDelete}>Delete</button>
 					<Link to={{
 						pathname: '/editPost',
 						post: props.post
 					}}>
-						<button type="button" className="btn btn-outline-secondary">Hola</button>
+						<button type="button" className="btn btn-outline-primary">Editar</button>
 					</Link> 
 					</>: null}
 

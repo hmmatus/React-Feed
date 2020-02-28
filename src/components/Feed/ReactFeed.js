@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet'
 import NewPost from '../Forms/new_post'
 import EditPost from '../Forms/new_post'
 import swal from 'sweetalert'
+import NavBar from '../NavBar'
 
 class ReactFeed extends Component {
   constructor(props) {
@@ -139,6 +140,8 @@ class ReactFeed extends Component {
     });
 
     return (
+      <>
+      <NavBar logout={this.loggoutSession}/>
       <div className="container">
         <Helmet>
           <title>React Feed</title>
@@ -151,6 +154,7 @@ class ReactFeed extends Component {
           {postsComponents}
         </div>
       </div>
+      </>
     );
   }
 }
