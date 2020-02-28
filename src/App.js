@@ -7,6 +7,7 @@ import Register from './components/Register'
 import Login from './components/Login'
 import ReactFeed from './components/Feed/ReactFeed'
 import SplashScreen from './components/splash-screen/splash'
+import EditPost from './components/Feed/Edit'
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
       <Route path="/">
         <SplashScreen>
           <Route path="/" exact component={ReactFeed} />
+          <Route path="/editPost" component={EditPost}/>
         </SplashScreen>
       </Route>
     </Switch>

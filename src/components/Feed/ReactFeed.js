@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import Post from './Post'
-import { withRouter } from 'react-router-dom'
+import { withRouter,Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
+import NewPost from '../Forms/new_post'
+import EditPost from '../Forms/new_post'
+import swal from 'sweetalert'
 
 class ReactFeed extends Component {
   constructor(props) {
@@ -9,7 +12,8 @@ class ReactFeed extends Component {
 
     this.state = {
       posts: [],
-      token: localStorage.getItem('token')
+      token: localStorage.getItem('token'),
+      myUser:""
     }
   }
 
@@ -51,6 +55,59 @@ class ReactFeed extends Component {
       })
   }
 
+  editHandler=item=>{
+    swal()
+  }
+
+  deleteHandler = (element, index) => {
+    window.confirm('Seguro que deseas borrar este post') && this.deleteItem(element, index);
+  }
+  deleteItem = (id, index) => {
+
+    const data = {
+      _id: id
+    }
+    let config = {
+      method: "DELETE",
+      headers: {
+        'Content-type': 'Application/json',
+        authorization: `Bearer ${this.state.token}`
+      },
+      body: JSON.stringify(data)
+    }
+
+    fetch('https://reactcourseapi.herokuapp.com/post', config)
+      .then(res => {
+        if (res.ok) {
+          alert("Se ha borrado con exitos el post")
+          this.fetchData()
+        }
+        else{
+          throw new Error(res.status)
+        }
+      })
+      .catch(err=>{
+        console.log(err)
+      })
+
+    //alert("Deleted");
+  }
+
+  getUserId=async ()=>{
+    console.log(this.state.token);
+    let config = {
+      method: "GET",
+      headers: {
+        'Content-type': 'Application/json',
+        authorization: `Bearer ${this.state.token}`
+      },
+    }
+    const user=await fetch("https://reactcourseapi.herokuapp.com/user/name",config)
+    .then(res=>res.json())
+    .then(data=>data.username)
+    localStorage.setItem("myUser",user);
+  }
+
   loggoutSession = () => {
     console.log(localStorage.getItem('token'))
     localStorage.clear()
@@ -60,19 +117,23 @@ class ReactFeed extends Component {
 
   componentDidMount() {
     this.fetchData();
+    this.getUserId();
   }
 
   render() {
+    
     const postsComponents = this.state.posts.map((post, index) => {
 
       return (<Post
         key={index}
-        //name={post.user}
+        name={post.user}
         likes={post.likes}
         title={post.title}
         text={post.text}
         image={post.image}
+        post={post}
         onClick={() => this.likeHandler(index)}
+        onDelete={() => this.deleteHandler(post._id, index)}
       />);
 
     });
@@ -83,6 +144,7 @@ class ReactFeed extends Component {
           <title>React Feed</title>
         </Helmet>
         <h1 className="display-3">ReactFeed</h1>
+        <NewPost reload={()=>this.fetchData()} />
         <h2>Recent posts</h2>
         <button onClick={this.loggoutSession}>Cerrar sesion!</button>
         <div className="posts">
